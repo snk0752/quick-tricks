@@ -15,15 +15,10 @@ var spoofingCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
-		if target == "" {
-			cmd.Help()
-			colors.BAD.Println("Target must be specified.")
-			os.Exit(-1)
-		}
 		spoofingUrl, err := spoofing.Detect(target)
 		if err != nil {
 			fmt.Println(err)
-			os.Exit(-1)
+			return
 		}
 		if spoofingUrl != "" {
 			colors.OK.Println("Success content spoofing attack!")
@@ -37,4 +32,5 @@ var spoofingCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(spoofingCmd)
 	spoofingCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
+	spoofingCmd.MarkFlagRequired("url")
 }
