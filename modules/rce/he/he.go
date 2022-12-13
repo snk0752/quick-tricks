@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"quick-tricks/modules/tokens"
-	"quick-tricks/utils/colors"
+	"github.com/indigo-sadland/quick-tricks/modules/tokens"
+	"github.com/indigo-sadland/quick-tricks/utils/colors"
 	"strings"
 )
 
