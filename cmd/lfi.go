@@ -18,6 +18,7 @@ var lfiCmd = &cobra.Command{
 		lfiUrls, err := lfi.Detect(target)
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 
 		if len(lfiUrls) != 0 {
