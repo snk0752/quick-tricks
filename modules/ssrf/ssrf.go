@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"quick-tricks/modules/tokens"
+	"github.com/indigo-sadland/quick-tricks/modules/tokens"
 	"strings"
 )
 
