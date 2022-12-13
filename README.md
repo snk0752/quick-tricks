@@ -32,3 +32,5 @@ Flags:
 
 Use "quick-tricks [command] --help" for more information about a command.
 ```
+###
+*Author is not responsible for any damages. You are responsible for your own actions. Attacking targets without prior mutual consent is illegal.*
