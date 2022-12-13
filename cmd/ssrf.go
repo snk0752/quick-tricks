@@ -20,6 +20,7 @@ var ssrfCmd = &cobra.Command{
 			for _, e := range errors {
 				fmt.Println(e)
 			}
+			return
 		}
 		if len(ssrfSuccessed) != 0 {
 			colors.OK.Printf("Sent SSRF requests:\n")
