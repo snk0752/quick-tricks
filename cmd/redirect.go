@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"quick-tricks/modules/redirect"
-	"quick-tricks/utils/colors"
+	"github.com/indigo-sadland/quick-tricks/modules/redirect"
+	"github.com/indigo-sadland/quick-tricks/utils/colors"
 )
 
 // redirectCmd represents the redirect command.
