@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
-	"quick-tricks/modules/spoofing"
-	"quick-tricks/utils/colors"
+	"github.com/indigo-sadland/quick-tricks/modules/spoofing"
+	"github.com/indigo-sadland/quick-tricks/utils/colors"
 )
 
 // spoofingCmd represents the spoofing command.
