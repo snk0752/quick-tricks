@@ -14,7 +14,7 @@ import (
 // reconCmd represents the recon command
 var reconCmd = &cobra.Command{
 	Use:   "recon",
-	Short: "The 'recon' module helps to find login page endpoints, local path disclosure and license key.",
+	Short: "Module 'recon' helps to find login page endpoints, local path disclosure and license key.",
 	Run: func(cmd *cobra.Command, args []string) {
 		var detectLoginPages, detectLicense, detectPathDisclosure bool
 
