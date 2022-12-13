@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/indigo-sadland/quick-tricks/modules/rce/va"
+	"github.com/indigo-sadland/quick-tricks/modules/rce/he"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
 )
 
