@@ -17,6 +17,7 @@ var redirectCmd = &cobra.Command{
 		redirectUrls, err := redirect.Detect(target)
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		if len(redirectUrls) != 0 {
 			colors.OK.Println("Links vulnerable to redirect:")
