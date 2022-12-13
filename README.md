@@ -9,3 +9,26 @@
   ```
   go install github.com/indigo-sadland/quick-tricks@latest
   ```
+## Usage
+```
+Bitrix vulnerability scanner
+
+Usage:
+  quick-tricks [command]
+
+Available Commands:
+  help        Help about any command
+  lfi         Module 'lfi' checks if there are endpoints vulnerable to Local File Inclusion.
+  quick       Run all quick modules ('recon', 'lfi', 'redirect', 'spoofing' and 'xss')
+  rce         Module 'rce' tries to exploit vulnerable components of the target Bitrix.
+  recon       The 'recon' module helps to find login page endpoints, local path disclosure and license key.
+  redirect    Module 'redirect' checks endpoints vulnerable to Open Redirect.
+  spoofing    The 'spoofing' module tests target for possibility of Content Spoofing attack.
+  ssrf        Module 'ssrf' helps to check whether the target is vulnerable to SSRF or not.
+  xss         Module 'xss' checks target's endpoints that potentially can be vulnerable XSS.
+
+Flags:
+  -h, --help   help for quick-tricks
+
+Use "quick-tricks [command] --help" for more information about a command.
+```
