@@ -25,7 +25,7 @@ var voteCmd = &cobra.Command{
 		lhost, _ := cmd.Flags().GetString("lhost")
 		lport, _ := cmd.Flags().GetString("lport")
 		agentId, _ := cmd.Flags().GetString("agentId")
-		_, _, err := va.Exploit(target, lhost, lport, agentId, webshell)
+		err := va.Exploit(target, lhost, lport, agentId, webshell)
 		if err != nil {
 			colors.BAD.Println(err)
 		}
