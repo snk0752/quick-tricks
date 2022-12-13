@@ -38,6 +38,7 @@ var reconCmd = &cobra.Command{
 			pages, err := lp.Detect(target)
 			if err != nil {
 				fmt.Println(err)
+				return
 			}
 			if len(pages) != 0 {
 				fmt.Printf("Login Page Endpoints:\n")
@@ -61,6 +62,7 @@ var reconCmd = &cobra.Command{
 			licenseExposed, err := license.Detect(target)
 			if err != nil {
 				fmt.Println(err)
+				return
 			}
 			if licenseExposed != "" {
 				colors.OK.Printf("\nLicense file is exposed!")
@@ -74,6 +76,7 @@ var reconCmd = &cobra.Command{
 			pathDisclosure, err := lpd.Detect(target)
 			if err != nil {
 				fmt.Println(err)
+				return
 			}
 			if pathDisclosure != nil {
 				colors.OK.Printf("\nLinks that expose local paths:\n")
