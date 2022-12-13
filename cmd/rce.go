@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"quick-tricks/modules/rce/va"
-	"quick-tricks/utils/colors"
+	"github.com/indigo-sadland/quick-tricks/modules/rce/va"
+	"github.com/indigo-sadland/quick-tricks/utils/colors"
 )
 
 // rceCmd represents the rce command
