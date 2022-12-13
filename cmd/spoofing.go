@@ -11,7 +11,7 @@ import (
 // spoofingCmd represents the spoofing command.
 var spoofingCmd = &cobra.Command{
 	Use:   "spoofing",
-	Short: "The 'spoofing' module tests target for possibility of Content Spoofing attack.",
+	Short: "Module 'spoofing' tests target for possibility of Content Spoofing attack.",
 
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
