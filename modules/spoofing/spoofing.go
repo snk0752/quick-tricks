@@ -23,7 +23,7 @@ func Detect(target string) (string, error) {
 	if resp.StatusCode == 200 {
 		body, _ := io.ReadAll(resp.Body)
 		if len(body) != 0 {
-			if strings.Contains(string(body), "TEXT+INJECTION!+PLEASE+CLICK+HERE") {
+			if strings.Contains(string(body), "TEXT INJECTION! PLEASE CLICK HERE") {
 				return url, nil
 			}
 		}
