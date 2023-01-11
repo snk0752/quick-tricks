@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"os"
 	"github.com/indigo-sadland/quick-tricks/modules/spoofing"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
 )
