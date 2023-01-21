@@ -19,7 +19,7 @@ var rceCmd = &cobra.Command{
 // voteCmd represents the vote-agent subcommand.
 var voteCmd = &cobra.Command{
 	Use:   "vote-agent",
-	Short: "(NOT IMPLEMENTED) Exploit RCE via vote agent (Bitrix <= 21.400.100).",
+	Short: "Exploit RCE via vote agent (Bitrix <= 21.400.100).",
 	Run: func(cmd *cobra.Command, args []string) {
 		webshell, _ := cmd.Flags().GetBool("web-shell")
 		target, _ := cmd.Flags().GetString("url")
@@ -36,7 +36,7 @@ var voteCmd = &cobra.Command{
 // voteCmd represents the vote-agent subcommand.
 var editorCmd = &cobra.Command{
 	Use:   "html-editor",
-	Short: "Exploit RCE via html editor (Bitrix <= 20.100.0).",
+	Short: "(NOT IMPLEMENTED) Exploit RCE via html editor (Bitrix <= 20.100.0).",
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
 		err := he.Exploit(target)
