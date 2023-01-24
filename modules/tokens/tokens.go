@@ -63,7 +63,7 @@ func Get(target string) (*CompositeData, *http.Cookie, error) {
 		}
 		cookies := resp.Cookies()
 		for _, v := range cookies {
-			if v.Name == "PHPSESSID" {
+			if strings.Contains(v.Name,"PHPSESSID")  {
 				cookie = &http.Cookie{
 					Name:  v.Name,
 					Value: v.Value,
