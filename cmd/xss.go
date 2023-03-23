@@ -17,7 +17,7 @@ var xssCmd = &cobra.Command{
 
 		xssUrls, err := xss.BuildPayloads(target)
 		if err != nil {
-			fmt.Println(err)
+			colors.BAD.Println(err)
 			return
 		}
 		if len(xssUrls) != 0 {

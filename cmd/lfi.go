@@ -14,8 +14,9 @@ var lfiCmd = &cobra.Command{
 	Short: "Module 'lfi' checks if there are endpoints vulnerable to Local File Inclusion.",
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
+		proxy, _ := cmd.Flags().GetString("proxy")
 
-		lfiUrls, err := lfi.Detect(target)
+		lfiUrls, err := lfi.Detect(target, proxy)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -36,4 +37,5 @@ func init() {
 	rootCmd.AddCommand(lfiCmd)
 	lfiCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	lfiCmd.MarkFlagRequired("url")
+	lfiCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 }

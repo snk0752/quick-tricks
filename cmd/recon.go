@@ -3,11 +3,11 @@ package cmd
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"github.com/spf13/cobra"
 	"github.com/indigo-sadland/quick-tricks/modules/recon/license"
 	"github.com/indigo-sadland/quick-tricks/modules/recon/lp"
 	"github.com/indigo-sadland/quick-tricks/modules/recon/lpd"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/spf13/cobra"
 	"strings"
 )
 
@@ -22,6 +22,7 @@ var reconCmd = &cobra.Command{
 		detectLicense, _ = cmd.Flags().GetBool("license")
 		detectPathDisclosure, _ = cmd.Flags().GetBool("lpd")
 		allChecks, _ := cmd.Flags().GetBool("all")
+		proxy, _ := cmd.Flags().GetString("proxy")
 		if detectLoginPages || detectLicense || detectPathDisclosure {
 			allChecks = false
 		}
@@ -35,7 +36,7 @@ var reconCmd = &cobra.Command{
 
 		// Action for the lp flag.
 		if detectLoginPages {
-			pages, err := lp.Detect(target)
+			pages, err := lp.Detect(target, proxy)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -59,7 +60,7 @@ var reconCmd = &cobra.Command{
 		}
 		// Action for the license flag.
 		if detectLicense {
-			licenseExposed, err := license.Detect(target)
+			licenseExposed, err := license.Detect(target, proxy)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -73,7 +74,7 @@ var reconCmd = &cobra.Command{
 		}
 		// Action for the lpd flag.
 		if detectPathDisclosure {
-			pathDisclosure, err := lpd.Detect(target)
+			pathDisclosure, err := lpd.Detect(target, proxy)
 			if err != nil {
 				fmt.Println(err)
 				return
@@ -92,10 +93,12 @@ var reconCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(reconCmd)
+
 	reconCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	reconCmd.MarkFlagRequired("url")
 	reconCmd.Flags().Bool("lp", false, "Check possible login page endpoints")
 	reconCmd.Flags().Bool("license", false, "Check if license file is exposed")
 	reconCmd.Flags().Bool("lpd", false, "Check local path disclosure")
 	reconCmd.Flags().BoolP("all", "a", true, "Run all checks")
+	reconCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 }

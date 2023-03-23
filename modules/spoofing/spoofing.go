@@ -2,8 +2,9 @@
 package spoofing
 
 import (
+	"fmt"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
 	"io"
-	"net/http"
 	"strings"
 )
 
@@ -12,10 +13,16 @@ const (
 		"items[1][TITLE]=TEXT+INJECTION!+PLEASE+CLICK+HERE!&items[1][DETAIL_LINK]=https://attaker.example"
 )
 
-func Detect(target string) (string, error) {
-
+func Detect(target, proxy string) (string, error) {
 	url := target + endpoint1
-	resp, err := http.Get(url)
+
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return "", err
+	}
+
+	resp, err := client.Get(url)
 	if err != nil {
 		return "", err
 	}

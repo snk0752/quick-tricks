@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"github.com/indigo-sadland/quick-tricks/modules/ssrf"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/spf13/cobra"
 )
 
 // ssrfCmd represents the ssrf command.
@@ -14,11 +14,12 @@ var ssrfCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
 		server, _ := cmd.Flags().GetString("server")
+		proxy, _ := cmd.Flags().GetString("proxy")
 
-		ssrfSuccessed, errors := ssrf.Detect(target, server)
+		ssrfSuccessed, errors := ssrf.Detect(target, server, proxy)
 		if len(errors) != 0 {
 			for _, e := range errors {
-				fmt.Println(e)
+				colors.BAD.Println(e)
 			}
 			return
 		}
@@ -47,4 +48,5 @@ func init() {
 	ssrfCmd.MarkFlagRequired("url")
 	ssrfCmd.Flags().StringP("server", "s", "", "External host with running HTTP server (with protocol type: http/https")
 	ssrfCmd.MarkFlagRequired("server")
+	ssrfCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 }

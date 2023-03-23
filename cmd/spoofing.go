@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"github.com/indigo-sadland/quick-tricks/modules/spoofing"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/spf13/cobra"
 )
 
 // spoofingCmd represents the spoofing command.
@@ -14,9 +14,11 @@ var spoofingCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
-		spoofingUrl, err := spoofing.Detect(target)
+		proxy, _ := cmd.Flags().GetString("proxy")
+
+		spoofingUrl, err := spoofing.Detect(target, proxy)
 		if err != nil {
-			fmt.Println(err)
+			colors.BAD.Println(err)
 			return
 		}
 		if spoofingUrl != "" {
@@ -30,6 +32,8 @@ var spoofingCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(spoofingCmd)
+
 	spoofingCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	spoofingCmd.MarkFlagRequired("url")
+	spoofingCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 }

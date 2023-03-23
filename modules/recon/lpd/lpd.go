@@ -2,8 +2,9 @@
 package lpd
 
 import (
+	"fmt"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
 	"io"
-	"net/http"
 	"strings"
 )
 
@@ -19,14 +20,19 @@ const (
 	endpoint9 = "/bitrix/components/bitrix/forum.user.profile.edit/templates/.default/interface.php"
 )
 
-func Detect(target string) ([]string, error) {
+func Detect(target, proxy string) ([]string, error) {
 	var pages []string
 	endpoints := []string{endpoint1, endpoint2, endpoint3, endpoint4, endpoint5, endpoint6, endpoint7, endpoint8,
 		endpoint9}
 
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return nil, err
+	}
 	for _, v := range endpoints {
 		url := target + v
-		resp, err := http.Get(url)
+		resp, err := client.Get(url)
 		if err != nil {
 			return nil, err
 		} else {

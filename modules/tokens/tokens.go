@@ -2,6 +2,8 @@
 package tokens
 
 import (
+	"fmt"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
 	"io"
 	"net/http"
 	"strconv"
@@ -17,13 +19,18 @@ type CompositeData struct {
 	BitrixSessid   string
 }
 
-func Get(target string) (*CompositeData, *http.Cookie, error) {
+func Get(target, proxy string) (*CompositeData, *http.Cookie, error) {
 	var serverTzOffset, userTzOffset, serverTime int
 	var bitrixSessid string
 	var cookie *http.Cookie
 
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return &CompositeData{}, &http.Cookie{}, err
+	}
 	url := target + endpoint
-	resp, err := http.Get(url)
+	resp, err := client.Get(url)
 	if err != nil {
 		return &CompositeData{}, &http.Cookie{}, err
 	}
@@ -63,7 +70,7 @@ func Get(target string) (*CompositeData, *http.Cookie, error) {
 		}
 		cookies := resp.Cookies()
 		for _, v := range cookies {
-			if strings.Contains(v.Name,"PHPSESSID")  {
+			if strings.Contains(v.Name, "PHPSESSID") {
 				cookie = &http.Cookie{
 					Name:  v.Name,
 					Value: v.Value,

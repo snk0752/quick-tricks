@@ -2,15 +2,23 @@
 package license
 
 import (
+	"fmt"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
 	"io"
-	"net/http"
 )
 
 const endpoint = "/bitrix/license_key.php"
 
-func Detect(target string) (string, error) {
+func Detect(target, proxy string) (string, error) {
 	url := target + endpoint
-	resp, err := http.Get(url)
+
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return "", err
+	}
+	resp, err := client.Get(url)
+
 	if err != nil {
 		return "", err
 	}

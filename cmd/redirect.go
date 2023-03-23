@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"github.com/indigo-sadland/quick-tricks/modules/redirect"
 	"github.com/indigo-sadland/quick-tricks/utils/colors"
+	"github.com/spf13/cobra"
 )
 
 // redirectCmd represents the redirect command.
@@ -13,10 +13,11 @@ var redirectCmd = &cobra.Command{
 	Short: "Module 'redirect' checks endpoints vulnerable to Open Redirect.",
 	Run: func(cmd *cobra.Command, args []string) {
 		target, _ := cmd.Flags().GetString("url")
+		proxy, _ := cmd.Flags().GetString("proxy")
 
-		redirectUrls, err := redirect.Detect(target)
+		redirectUrls, err := redirect.Detect(target, proxy)
 		if err != nil {
-			fmt.Println(err)
+			colors.BAD.Println(err)
 			return
 		}
 		if len(redirectUrls) != 0 {
@@ -32,6 +33,8 @@ var redirectCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(redirectCmd)
+
 	redirectCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	redirectCmd.MarkFlagRequired("url")
+	redirectCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
 }
