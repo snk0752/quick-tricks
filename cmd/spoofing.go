@@ -35,5 +35,5 @@ func init() {
 
 	spoofingCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	spoofingCmd.MarkFlagRequired("url")
-	spoofingCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	spoofingCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 }

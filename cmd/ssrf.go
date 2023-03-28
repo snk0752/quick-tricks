@@ -48,5 +48,5 @@ func init() {
 	ssrfCmd.MarkFlagRequired("url")
 	ssrfCmd.Flags().StringP("server", "s", "", "External host with running HTTP server (with protocol type: http/https")
 	ssrfCmd.MarkFlagRequired("server")
-	ssrfCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	ssrfCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 }

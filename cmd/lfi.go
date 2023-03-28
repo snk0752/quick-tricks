@@ -37,5 +37,5 @@ func init() {
 	rootCmd.AddCommand(lfiCmd)
 	lfiCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	lfiCmd.MarkFlagRequired("url")
-	lfiCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	lfiCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 }

@@ -62,7 +62,7 @@ func init() {
 	voteCmd.MarkFlagRequired("lport")
 	voteCmd.Flags().String("agentId", "4", "ID of vote module agent (2,4 and 7 are available)")
 	voteCmd.Flags().Bool("web-shell", false, "Use web shell instead of console reverse shell.")
-	voteCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	voteCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 
 	editorCmd.PersistentFlags().StringP("url", "u", "", "Target Bitrix site")
 	editorCmd.MarkFlagRequired("url")
@@ -70,5 +70,5 @@ func init() {
 	editorCmd.MarkFlagRequired("lhost")
 	editorCmd.PersistentFlags().String("lport", "", "Port of the host that listens for reverse connection")
 	editorCmd.MarkFlagRequired("lport")
-	editorCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	editorCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 }

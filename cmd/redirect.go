@@ -36,5 +36,5 @@ func init() {
 
 	redirectCmd.Flags().StringP("url", "u", "", "Target Bitrix site")
 	redirectCmd.MarkFlagRequired("url")
-	redirectCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	redirectCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 }

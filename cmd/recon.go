@@ -23,10 +23,12 @@ var reconCmd = &cobra.Command{
 		detectPathDisclosure, _ = cmd.Flags().GetBool("lpd")
 		allChecks, _ := cmd.Flags().GetBool("all")
 		proxy, _ := cmd.Flags().GetString("proxy")
+
 		if detectLoginPages || detectLicense || detectPathDisclosure {
 			allChecks = false
 		}
-		if allChecks {
+
+		if !detectLicense && !detectPathDisclosure && !detectLoginPages && !allChecks || allChecks {
 			detectLoginPages = true
 			detectLicense = true
 			detectPathDisclosure = true
@@ -100,5 +102,5 @@ func init() {
 	reconCmd.Flags().Bool("license", false, "Check if license file is exposed")
 	reconCmd.Flags().Bool("lpd", false, "Check local path disclosure")
 	reconCmd.Flags().BoolP("all", "a", true, "Run all checks")
-	reconCmd.Flags().String("proxy", "", "socks5 proxy to use. Example: socks5://IP:PORT")
+	reconCmd.Flags().String("proxy", "", "http/socks5 proxy to use. Example: socks5://IP:PORT")
 }
